@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="zh-tw" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Git 版本控制介紹 | VKmouse</title><meta name="keywords" content="Git"><meta name="author" content="VKmouse"><meta name="copyright" content="VKmouse"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本篇文章主要介紹版本控制軟體 Git，以及 Git、 GitHub 和 GitHub Desktop 的關聯性。  版本控制介紹 Git 簡介 Git 重要名詞介紹 Git 功能介紹 Git、GitHub 和 GitHub Desktop 的關係 參考資料  版本控制介紹什麼是版本控制控制文件在不同時候的內容，主要功能有儲存當前版本、恢復到特定版本、合併不同版本 … 什麼時候使用在編輯任何事物時，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 版本控制介紹">
+<meta property="og:url" content="https://vkmouse.github.io/2022/09/25/Introduction_to_Git_Version_Control/index.html">
+<meta property="og:site_name" content="VKmouse">
+<meta property="og:description" content="本篇文章主要介紹版本控制軟體 Git，以及 Git、 GitHub 和 GitHub Desktop 的關聯性。  版本控制介紹 Git 簡介 Git 重要名詞介紹 Git 功能介紹 Git、GitHub 和 GitHub Desktop 的關係 參考資料  版本控制介紹什麼是版本控制控制文件在不同時候的內容，主要功能有儲存當前版本、恢復到特定版本、合併不同版本 … 什麼時候使用在編輯任何事物時，">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://vkmouse.github.io/img/categories/git.png">
+<meta property="article:published_time" content="2022-09-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-28T13:26:42.536Z">
+<meta property="article:author" content="VKmouse">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vkmouse.github.io/img/categories/git.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vkmouse.github.io/2022/09/25/Introduction_to_Git_Version_Control/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Git 版本控制介紹',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-09-28 21:26:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/top_img.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/top_img.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">VKmouse</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Git 版本控制介紹</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-09-24T16:00:00.000Z" title="Created 2022-09-25 00:00:00">2022-09-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-09-28T13:26:42.536Z" title="Updated 2022-09-28 21:26:42">2022-09-28</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>本篇文章主要介紹版本控制軟體 Git，以及 Git、 GitHub 和 GitHub Desktop 的關聯性。</p>
+<ul>
+<li>版本控制介紹</li>
+<li>Git 簡介</li>
+<li>Git 重要名詞介紹</li>
+<li>Git 功能介紹</li>
+<li>Git、GitHub 和 GitHub Desktop 的關係</li>
+<li>參考資料</li>
+</ul>
+<h3 id="版本控制介紹"><a href="#版本控制介紹" class="headerlink" title="版本控制介紹"></a>版本控制介紹</h3><h4 id="什麼是版本控制"><a href="#什麼是版本控制" class="headerlink" title="什麼是版本控制"></a>什麼是版本控制</h4><p>控制文件在不同時候的內容，主要功能有<strong>儲存當前版本</strong>、<strong>恢復到特定版本</strong>、<strong>合併不同版本</strong> …</p>
+<h4 id="什麼時候使用"><a href="#什麼時候使用" class="headerlink" title="什麼時候使用"></a>什麼時候使用</h4><p>在編輯任何事物時，想要參考或使用過去版本或不同版本</p>
+<h4 id="為什麼使用版本控制"><a href="#為什麼使用版本控制" class="headerlink" title="為什麼使用版本控制"></a>為什麼使用版本控制</h4><p>版本控制幫助我們更靈活操作檔案</p>
+<ol>
+<li>操作失誤時，可以恢復版本</li>
+<li>共同開發時，可以個別開發後合併版本</li>
+</ol>
+<h4 id="哪裡有版本控制"><a href="#哪裡有版本控制" class="headerlink" title="哪裡有版本控制"></a>哪裡有版本控制</h4><p>以下有一些生活中版本控制的例子，並不侷限在軟體開發</p>
+<ol>
+<li><p>Word 當機重啟，詢問是不是要恢復這個版本</p>
+</li>
+<li><p>當你有個資料夾 <code>MyDocument</code> 的目錄結構如下，</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MyDocument</span><br><span class="line">├─ MyDocument-20220923.doc</span><br><span class="line">├─ MyDocument-20220923-1.doc</span><br><span class="line">└─ MyDocument-20220924.doc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用 30 顆高級球卻沒抓到神奇寶貝時，關掉重開 Gameboy 再抓一次</p>
+</li>
+</ol>
+<h3 id="Git-簡介"><a href="#Git-簡介" class="headerlink" title="Git 簡介"></a>Git 簡介</h3><h4 id="什麼是-Git"><a href="#什麼是-Git" class="headerlink" title="什麼是 Git"></a>什麼是 Git</h4><p>Git 是一個<strong>使用指令操作</strong>的版本控制軟體</p>
+<h4 id="那-Github-又是誰"><a href="#那-Github-又是誰" class="headerlink" title="那 Github 又是誰"></a>那 Github 又是誰</h4><p>Github 是一個<strong>原始碼託管網站</strong>，他使用 Git 作為他的版本控制工具，但是 Github 不只做版本控制一件事，<br>還可以讓我們架設靜態網站 Git Pages 等，在底下會更詳細描述他們之間的關係</p>
+<h4 id="那-Github-Desktop-和-Git-是什麼關係"><a href="#那-Github-Desktop-和-Git-是什麼關係" class="headerlink" title="那 Github Desktop 和 Git 是什麼關係"></a>那 Github Desktop 和 Git 是什麼關係</h4><p>Github Desktop 是 Git 的<strong>圖形化介面客戶端</strong>，可以更直覺使用 Git 的各種功能，但使用圖形化介面前，<br>更重要的是要了解 Git 能做什麼，才知道要怎麼用 Github Desktop</p>
+<h3 id="Git-重要名詞介紹"><a href="#Git-重要名詞介紹" class="headerlink" title="Git 重要名詞介紹"></a>Git 重要名詞介紹</h3><p>在 Git 中有四個重要的區域概念，分別是工作目錄、暫存區、儲存庫和遠端儲存庫，這些區域的階層關係如下圖</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_Git_Version_Control/git-glossary.svg" alt="git-glossary"></td>
+</tr>
+<tr>
+<td align="center">圖1 Git 名詞介紹</td>
+</tr>
+</tbody></table>
+<h4 id="工作目錄-Working-Directory"><a href="#工作目錄-Working-Directory" class="headerlink" title="工作目錄 (Working Directory)"></a>工作目錄 (Working Directory)</h4><ul>
+<li>描述: 要進行版本控制的空間</li>
+<li>功能: 放置一個專案的最外層 (根目錄)</li>
+<li>位置: 位於個人電腦的資料夾，例如: <code>C:/repositories/repo</code></li>
+</ul>
+<h4 id="暫存區-Staging-Area"><a href="#暫存區-Staging-Area" class="headerlink" title="暫存區 (Staging Area)"></a>暫存區 (<a target="_blank" rel="noopener" href="https://git-scm.com/about/staging-area">Staging Area</a>)</h4><ul>
+<li>描述: 一個提交到儲存庫之前，暫時存放的區域</li>
+<li>功能: 可以在這個階段進行<strong>審查</strong></li>
+<li>位置: 位於工作目錄的 .git 資料夾，例如: <code>C:/repositories/repo/.git</code></li>
+</ul>
+<h4 id="儲存庫-Repository"><a href="#儲存庫-Repository" class="headerlink" title="儲存庫 (Repository)"></a>儲存庫 (Repository)</h4><ul>
+<li>描述: 一個儲存各個版本的空間</li>
+<li>功能: 可以從儲存庫調用版本，或上傳版本到儲存庫</li>
+<li>位置: 位於工作目錄的 .git 資料夾，例如: <code>C:/repositories/repo/.git</code></li>
+</ul>
+<h4 id="遠端儲存庫-Remote-Repository"><a href="#遠端儲存庫-Remote-Repository" class="headerlink" title="遠端儲存庫 (Remote Repository)"></a>遠端儲存庫 (Remote Repository)</h4><ul>
+<li>描述: 一個遠端空間</li>
+<li>功能: 用來儲放 .git 資料夾</li>
+<li>位置<ol>
+<li>可以在 GitHub 上，例如: <code>https://github.com/USERNAME/repo.git</code></li>
+<li>可以在其他伺服器 (個人電腦)</li>
+</ol>
+</li>
+</ul>
+<h3 id="Git-功能介紹"><a href="#Git-功能介紹" class="headerlink" title="Git 功能介紹"></a>Git 功能介紹</h3><p>利用<a target="_blank" rel="noopener" href="https://git-scm.com/docs">官方文件</a>的功能分類方式，描述其中三種類型的部分功能，包含<strong>取得或新建儲存庫</strong>、<strong>基本操作</strong>和<strong>遠端操作</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_Git_Version_Control/git-features.svg" alt="git-features"></td>
+</tr>
+<tr>
+<td align="center">圖2 Git 功能介紹</td>
+</tr>
+</tbody></table>
+<h4 id="取得或新建儲存庫"><a href="#取得或新建儲存庫" class="headerlink" title="取得或新建儲存庫"></a>取得或新建儲存庫</h4><ol>
+<li>新增一個空白的儲存庫 (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-init">git init</a>)</li>
+<li>下載遠端儲存庫到新的工作目錄 (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-clone">git clone</a>)</li>
+</ol>
+<h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><ol start="3">
+<li>新增<strong>檔案的變更內容</strong>到暫存區 (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-add">git add</a>)</li>
+<li>提交<strong>暫存區的變更內容</strong>到儲存庫 (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-commit">git commit</a>)</li>
+<li>顯示工作目錄、暫存區和儲存庫的<strong>檔案路徑差異</strong> (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-status">git status</a>)</li>
+<li>顯示工作目錄、暫存區和儲存庫的<strong>檔案內容差異</strong> (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-diff">git diff</a>)</li>
+<li>復原工作目錄的檔案 (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-restore">git restore</a>)</li>
+</ol>
+<h4 id="遠端操作"><a href="#遠端操作" class="headerlink" title="遠端操作"></a>遠端操作</h4><ol start="8">
+<li>管理遠端儲存庫 (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-remote">git remote</a>)</li>
+<li>上傳儲存庫到遠端儲存庫 (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-push">git push</a>)</li>
+<li>下載遠端儲存庫到儲存庫並合併至工作目錄 (<a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-pull">git pull</a>)</li>
+</ol>
+<h3 id="Git、GitHub-和-GitHub-Desktop-的關係"><a href="#Git、GitHub-和-GitHub-Desktop-的關係" class="headerlink" title="Git、GitHub 和 GitHub Desktop 的關係"></a>Git、GitHub 和 GitHub Desktop 的關係</h3><ol>
+<li><p>Git: 負責的事情是「版本控制」，<strong>提交版本</strong>、<strong>恢復版本</strong>或<strong>比對版本差異</strong>等，都是 Git 的任務。</p>
+</li>
+<li><p>GitHub: 一個「原始碼託管網站」，提供一個雲端空間儲存 Git 的儲存庫，並且<strong>呈現版本差異</strong>，除此之外還有很多功能</p>
+</li>
+<li><p>GitHub Desktop: 一個 Git 的「圖形化介面客戶端」，提供圖形化介面的<strong>提交版本</strong>、<strong>恢復版本</strong>或<strong>比對版本差異</strong></p>
+<p> 版本控制 (Version control)、<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Comparison_of_source-code-hosting_facilities">原始碼託管網站 (Source code hosting website)</a> 和<a target="_blank" rel="noopener" href="https://git-scm.com/downloads/guis/">圖形化介面客戶端 (GUI client)</a> 的關係如下圖。在託管網站中比較特別的是 Gitea，他是一個免費自架的原始碼託管網站，可以架在自己網域或是內網。在 GUI 中 GitKraken 是以介面美觀且功能完整而聞名。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_Git_Version_Control/relationship.svg" alt="relationship"></td>
+</tr>
+<tr>
+<td align="center">圖3 Git、GitHub 和 GitHub關係圖</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><p><a target="_blank" rel="noopener" href="https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories">About remote repositories</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Comparison_of_source-code-hosting_facilities">Comparison of source-code-hosting facilities</a><br><a target="_blank" rel="noopener" href="https://git-scm.com/doc">Git Documentation</a><br><a target="_blank" rel="noopener" href="https://git-scm.com/downloads/guis/">Git-GUI Clients</a><br><a target="_blank" rel="noopener" href="https://gitbook.tw/chapters/using-git/working-staging-and-repository">工作區、暫存區與儲存庫</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io">VKmouse</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io/2022/09/25/Introduction_to_Git_Version_Control/">https://vkmouse.github.io/2022/09/25/Introduction_to_Git_Version_Control/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Git/">Git</a></div><div class="post_share"><div class="social-share" data-image="/img/categories/git.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/09/26/Go_Programming_Language_Installation_and_Setup/"><img class="prev-cover" src="/img/categories/go.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Go 安裝和建立專案</div></div></a></div><div class="next-post pull-right"><a href="/2022/09/22/Introduction_to_CSS_BEM_selector_naming_convention/"><img class="next-cover" src="/img/categories/css.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">CSS BEM 選擇器命名規則簡介，以 KKBOX 為例</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E4%BB%8B%E7%B4%B9"><span class="toc-text">版本控制介紹</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="toc-text">什麼是版本控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E9%BA%BC%E6%99%82%E5%80%99%E4%BD%BF%E7%94%A8"><span class="toc-text">什麼時候使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E4%BD%BF%E7%94%A8%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="toc-text">為什麼使用版本控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%93%AA%E8%A3%A1%E6%9C%89%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="toc-text">哪裡有版本控制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-%E7%B0%A1%E4%BB%8B"><span class="toc-text">Git 簡介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-Git"><span class="toc-text">什麼是 Git</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%82%A3-Github-%E5%8F%88%E6%98%AF%E8%AA%B0"><span class="toc-text">那 Github 又是誰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%82%A3-Github-Desktop-%E5%92%8C-Git-%E6%98%AF%E4%BB%80%E9%BA%BC%E9%97%9C%E4%BF%82"><span class="toc-text">那 Github Desktop 和 Git 是什麼關係</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-%E9%87%8D%E8%A6%81%E5%90%8D%E8%A9%9E%E4%BB%8B%E7%B4%B9"><span class="toc-text">Git 重要名詞介紹</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E7%9B%AE%E9%8C%84-Working-Directory"><span class="toc-text">工作目錄 (Working Directory)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9A%AB%E5%AD%98%E5%8D%80-Staging-Area"><span class="toc-text">暫存區 (Staging Area)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%84%B2%E5%AD%98%E5%BA%AB-Repository"><span class="toc-text">儲存庫 (Repository)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%81%A0%E7%AB%AF%E5%84%B2%E5%AD%98%E5%BA%AB-Remote-Repository"><span class="toc-text">遠端儲存庫 (Remote Repository)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git-%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%B4%B9"><span class="toc-text">Git 功能介紹</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%96%E5%BE%97%E6%88%96%E6%96%B0%E5%BB%BA%E5%84%B2%E5%AD%98%E5%BA%AB"><span class="toc-text">取得或新建儲存庫</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text">基本操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%81%A0%E7%AB%AF%E6%93%8D%E4%BD%9C"><span class="toc-text">遠端操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git%E3%80%81GitHub-%E5%92%8C-GitHub-Desktop-%E7%9A%84%E9%97%9C%E4%BF%82"><span class="toc-text">Git、GitHub 和 GitHub Desktop 的關係</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理"><img src="/img/categories/aws.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AWS S3 上傳下載權限管理"/></a><div class="content"><a class="title" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理">AWS S3 上傳下載權限管理</a><time datetime="2022-11-27T09:00:00.000Z" title="Created 2022-11-27 17:00:00">2022-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"/></a><div class="content"><a class="title" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)">使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)</a><time datetime="2022-11-19T10:00:00.000Z" title="Created 2022-11-19 18:00:00">2022-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH"><img src="/img/categories/ssh.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在 Windows 安裝 OpenSSH"/></a><div class="content"><a class="title" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH">在 Windows 安裝 OpenSSH</a><time datetime="2022-11-13T08:00:00.000Z" title="Created 2022-11-13 16:00:00">2022-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NGINX 架設靜態檔案伺服器"/></a><div class="content"><a class="title" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器">NGINX 架設靜態檔案伺服器</a><time datetime="2022-11-04T08:00:00.000Z" title="Created 2022-11-04 16:00:00">2022-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例"><img src="/img/categories/windows10.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="環境變數介紹，以 Windows 10 為例"/></a><div class="content"><a class="title" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例">環境變數介紹，以 Windows 10 為例</a><time datetime="2022-11-01T10:00:00.000Z" title="Created 2022-11-01 18:00:00">2022-11-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/top_img.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By VKmouse</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div></div></body></html>

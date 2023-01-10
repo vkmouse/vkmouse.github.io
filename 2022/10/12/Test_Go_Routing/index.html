@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="zh-tw" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Go 測試路由 | VKmouse</title><meta name="keywords" content="Go"><meta name="author" content="VKmouse"><meta name="copyright" content="VKmouse"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本篇文章使用 testify 測試框架，對使用 gin 後端框架開發的應用程式進行測試  Assert Path Assert Query String Assert Body Contains Assert Status OK Follow Redirects Get Post 測試 Html 測試 Redirects 測試 Session  Assert Path斷言 Request 的路徑">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go 測試路由">
+<meta property="og:url" content="https://vkmouse.github.io/2022/10/12/Test_Go_Routing/index.html">
+<meta property="og:site_name" content="VKmouse">
+<meta property="og:description" content="本篇文章使用 testify 測試框架，對使用 gin 後端框架開發的應用程式進行測試  Assert Path Assert Query String Assert Body Contains Assert Status OK Follow Redirects Get Post 測試 Html 測試 Redirects 測試 Session  Assert Path斷言 Request 的路徑">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://vkmouse.github.io/img/categories/go.png">
+<meta property="article:published_time" content="2022-10-12T14:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-12T13:38:08.083Z">
+<meta property="article:author" content="VKmouse">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vkmouse.github.io/img/categories/go.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vkmouse.github.io/2022/10/12/Test_Go_Routing/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Go 測試路由',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-10-12 21:38:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/top_img.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/top_img.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">VKmouse</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Go 測試路由</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-10-12T14:00:00.000Z" title="Created 2022-10-12 22:00:00">2022-10-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-10-12T13:38:08.083Z" title="Updated 2022-10-12 21:38:08">2022-10-12</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>本篇文章使用 testify 測試框架，對使用 gin 後端框架開發的應用程式進行測試</p>
+<ul>
+<li>Assert Path</li>
+<li>Assert Query String</li>
+<li>Assert Body Contains</li>
+<li>Assert Status OK</li>
+<li>Follow Redirects</li>
+<li>Get</li>
+<li>Post</li>
+<li>測試 Html</li>
+<li>測試 Redirects</li>
+<li>測試 Session</li>
+</ul>
+<h3 id="Assert-Path"><a href="#Assert-Path" class="headerlink" title="Assert Path"></a>Assert Path</h3><p>斷言 Request 的路徑</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">assertPath</span><span class="params">(t *testing.T, req *http.Request, expected <span class="type">string</span>)</span></span> &#123;</span><br><span class="line">    assert.Equal(t, expected, req.URL.Path)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Assert-Query-String"><a href="#Assert-Query-String" class="headerlink" title="Assert Query String"></a>Assert Query String</h3><p>斷言 Request 的查詢參數內容</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">assertQuery</span><span class="params">(t *testing.T, req *http.Request, expected url.Values)</span></span> &#123;</span><br><span class="line">	assert.Equal(t, expected.Encode(), req.URL.RawQuery)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Assert-Body-Contains"><a href="#Assert-Body-Contains" class="headerlink" title="Assert Body Contains"></a>Assert Body Contains</h3><p>斷言 Response 內容包含字串</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">assertContains</span><span class="params">(t *testing.T, w *httptest.ResponseRecorder, expected <span class="type">string</span>)</span></span> &#123;</span><br><span class="line">	assert.Contains(t, w.Body.String(), expected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Assert-Status-OK"><a href="#Assert-Status-OK" class="headerlink" title="Assert Status OK"></a>Assert Status OK</h3><p>斷言 Response 的 http code 是 200</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">assertStatusOK</span><span class="params">(t *testing.T, w *httptest.ResponseRecorder)</span></span> &#123;</span><br><span class="line">	assert.Equal(t, http.StatusOK, w.Code)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Follow-Redirects"><a href="#Follow-Redirects" class="headerlink" title="Follow Redirects"></a>Follow Redirects</h3><p>持續追蹤直到 Response 沒有 Location，回傳最後一個 Response 和 Request</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">followRedirects</span><span class="params">(router *gin.Engine, w *httptest.ResponseRecorder, req *http.Request)</span></span> (*httptest.ResponseRecorder, *http.Request) &#123;</span><br><span class="line">	location := w.Header().Get(<span class="string">&quot;Location&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> location == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> w, req</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	req.URL, _ = url.Parse(location)</span><br><span class="line">	w = httptest.NewRecorder()</span><br><span class="line">	router.ServeHTTP(w, req)</span><br><span class="line">	<span class="keyword">return</span> followRedirects(router, w, req)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Get"><a href="#Get" class="headerlink" title="Get"></a>Get</h3><p>建立一個到指定路徑的 Get 請求，可帶入 Query string</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">get</span><span class="params">(router *gin.Engine, path <span class="type">string</span>, data url.Values, follow <span class="type">bool</span>)</span></span> (*httptest.ResponseRecorder, *http.Request) &#123;</span><br><span class="line">	w := httptest.NewRecorder()</span><br><span class="line">	req, _ := http.NewRequest(http.MethodGet, path, <span class="literal">nil</span>)</span><br><span class="line">	req.URL.RawQuery = data.Encode()</span><br><span class="line">	router.ServeHTTP(w, req)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> follow &#123;</span><br><span class="line">		<span class="keyword">return</span> followRedirects(router, w, req)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> w, req</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Post"><a href="#Post" class="headerlink" title="Post"></a>Post</h3><p>建立一個到指定路徑的 Post 請求，可帶入 form data，繼續 follow 時採用 Get 執行</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">post</span><span class="params">(router *gin.Engine, path <span class="type">string</span>, data url.Values, follow <span class="type">bool</span>)</span></span> (*httptest.ResponseRecorder, *http.Request) &#123;</span><br><span class="line">	w := httptest.NewRecorder()</span><br><span class="line">	body := strings.NewReader(data.Encode())</span><br><span class="line">	req, _ := http.NewRequest(http.MethodPost, path, body)</span><br><span class="line">	req.Header.Add(<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;application/x-www-form-urlencoded&quot;</span>)</span><br><span class="line">	router.ServeHTTP(w, req)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> follow &#123;</span><br><span class="line">		req.Method = http.MethodGet</span><br><span class="line">		<span class="keyword">return</span> followRedirects(router, w, req)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> w, req</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="測試-Html"><a href="#測試-Html" class="headerlink" title="測試 Html"></a>測試 Html</h3><p>測試 Html 包含</p>
+<ol>
+<li>路徑</li>
+<li>特定內容</li>
+<li>狀態</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestHome</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	router := setupRouter()</span><br><span class="line">	w, req := get(router, <span class="string">&quot;/&quot;</span>, <span class="literal">nil</span>, <span class="literal">true</span>)</span><br><span class="line">	assertPath(t, req, <span class="string">&quot;/&quot;</span>)</span><br><span class="line">	assertContains(t, w, <span class="string">&quot;歡迎光臨，請輸入帳號密碼&quot;</span>)</span><br><span class="line">	assertStatusOK(t, w)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="測試-Redirects"><a href="#測試-Redirects" class="headerlink" title="測試 Redirects"></a>測試 Redirects</h3><p>測試 Redirects 包含</p>
+<ol>
+<li>路徑</li>
+<li>特定內容</li>
+<li>狀態</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestRedirectsMemberToHomeIfNotLogin</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	router := setupRouter()</span><br><span class="line">	w, req := get(router, <span class="string">&quot;/member&quot;</span>, <span class="literal">nil</span>, <span class="literal">true</span>)</span><br><span class="line">	assertPath(t, req, <span class="string">&quot;/&quot;</span>)</span><br><span class="line">	assertContains(t, w, <span class="string">&quot;歡迎光臨，請輸入帳號密碼&quot;</span>)</span><br><span class="line">	assertStatusOK(t, w)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="測試-Session"><a href="#測試-Session" class="headerlink" title="測試 Session"></a>測試 Session</h3><p>加入一個路由 api 設定 session，重新導入預期的第一個頁面</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestRedirectsHomeToMemberIfLogin</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	router := setupRouter()</span><br><span class="line">	router.GET(<span class="string">&quot;/mockapi&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">	    session := sessions.Default(ctx) <span class="comment">// gin-contrib/sessions</span></span><br><span class="line">	    session.Set(<span class="string">&quot;isLogin&quot;</span>, <span class="literal">true</span>)</span><br><span class="line">	    session.Save()</span><br><span class="line">		Redirect(ctx, http.StatusFound, <span class="string">&quot;/&quot;</span>)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	w, req := get(router, <span class="string">&quot;/mockapi&quot;</span>, <span class="literal">nil</span>, <span class="literal">true</span>)</span><br><span class="line">	assertPath(t, req, <span class="string">&quot;/member&quot;</span>)</span><br><span class="line">	assertContains(t, w, <span class="string">&quot;歡迎光臨，這是會員頁&quot;</span>)</span><br><span class="line">	assertStatusOK(t, w)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io">VKmouse</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io/2022/10/12/Test_Go_Routing/">https://vkmouse.github.io/2022/10/12/Test_Go_Routing/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Go/">Go</a></div><div class="post_share"><div class="social-share" data-image="/img/categories/go.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/23/Python_MySQL_Connector_API_Introduction/"><img class="prev-cover" src="/img/categories/python.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Python MySQL 常用類別方法簡介</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/12/Go_Programming_Language_gin_session/"><img class="next-cover" src="/img/categories/go.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Go Package - gin-contrib/sessions</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/09/27/Go_Programming_Language_Basic_Syntax/" title="Go 基本語法"><img class="cover" src="/img/categories/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-27</div><div class="title">Go 基本語法</div></div></a></div><div><a href="/2022/09/27/Go_Programming_Language_Import_Local_Package/" title="Go 導入本地包"><img class="cover" src="/img/categories/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-27</div><div class="title">Go 導入本地包</div></div></a></div><div><a href="/2022/09/26/Go_Programming_Language_Installation_and_Setup/" title="Go 安裝和建立專案"><img class="cover" src="/img/categories/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-26</div><div class="title">Go 安裝和建立專案</div></div></a></div><div><a href="/2022/09/28/Go_Unit_Test_Suite_testify/" title="Go 單元測試套件 testify"><img class="cover" src="/img/categories/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-28</div><div class="title">Go 單元測試套件 testify</div></div></a></div><div><a href="/2022/10/06/Go_Programming_Language_HTTP_Requests/" title="Go HTTP Request"><img class="cover" src="/img/categories/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-06</div><div class="title">Go HTTP Request</div></div></a></div><div><a href="/2022/10/06/Go_Programming_Language_String_Processing/" title="Go 字串處理"><img class="cover" src="/img/categories/go.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-06</div><div class="title">Go 字串處理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Assert-Path"><span class="toc-text">Assert Path</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Assert-Query-String"><span class="toc-text">Assert Query String</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Assert-Body-Contains"><span class="toc-text">Assert Body Contains</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Assert-Status-OK"><span class="toc-text">Assert Status OK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Follow-Redirects"><span class="toc-text">Follow Redirects</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Get"><span class="toc-text">Get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Post"><span class="toc-text">Post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%AC%E8%A9%A6-Html"><span class="toc-text">測試 Html</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%AC%E8%A9%A6-Redirects"><span class="toc-text">測試 Redirects</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%AC%E8%A9%A6-Session"><span class="toc-text">測試 Session</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理"><img src="/img/categories/aws.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AWS S3 上傳下載權限管理"/></a><div class="content"><a class="title" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理">AWS S3 上傳下載權限管理</a><time datetime="2022-11-27T09:00:00.000Z" title="Created 2022-11-27 17:00:00">2022-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"/></a><div class="content"><a class="title" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)">使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)</a><time datetime="2022-11-19T10:00:00.000Z" title="Created 2022-11-19 18:00:00">2022-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH"><img src="/img/categories/ssh.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在 Windows 安裝 OpenSSH"/></a><div class="content"><a class="title" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH">在 Windows 安裝 OpenSSH</a><time datetime="2022-11-13T08:00:00.000Z" title="Created 2022-11-13 16:00:00">2022-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NGINX 架設靜態檔案伺服器"/></a><div class="content"><a class="title" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器">NGINX 架設靜態檔案伺服器</a><time datetime="2022-11-04T08:00:00.000Z" title="Created 2022-11-04 16:00:00">2022-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例"><img src="/img/categories/windows10.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="環境變數介紹，以 Windows 10 為例"/></a><div class="content"><a class="title" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例">環境變數介紹，以 Windows 10 為例</a><time datetime="2022-11-01T10:00:00.000Z" title="Created 2022-11-01 18:00:00">2022-11-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/top_img.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By VKmouse</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div></div></body></html>

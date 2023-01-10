@@ -1,0 +1,384 @@
+<!DOCTYPE html><html lang="zh-tw" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>CSS BEM 選擇器命名規則簡介，以 KKBOX 為例 | VKmouse</title><meta name="keywords" content="CSS"><meta name="author" content="VKmouse"><meta name="copyright" content="VKmouse"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="剛開始寫 CSS 時，我們都知道要有意義的命名，但即使命名都有自己的意義，卻發現選擇器之間有很多重複的屬性，完成第一份作業後，就有問彭彭老師，老師就提到選擇器的命名規則是滿值得討論的議題，並讓我查詢「css bem naming」，我就開始調查，CSS 怎麼樣才是好命名，並查學習一些常見網頁的命名方式。    重要的命名觀念 BEM KKBOX 的導覽列分解 KKBOX 的導覽列總結 參考資料">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS BEM 選擇器命名規則簡介，以 KKBOX 為例">
+<meta property="og:url" content="https://vkmouse.github.io/2022/09/22/Introduction_to_CSS_BEM_selector_naming_convention/index.html">
+<meta property="og:site_name" content="VKmouse">
+<meta property="og:description" content="剛開始寫 CSS 時，我們都知道要有意義的命名，但即使命名都有自己的意義，卻發現選擇器之間有很多重複的屬性，完成第一份作業後，就有問彭彭老師，老師就提到選擇器的命名規則是滿值得討論的議題，並讓我查詢「css bem naming」，我就開始調查，CSS 怎麼樣才是好命名，並查學習一些常見網頁的命名方式。    重要的命名觀念 BEM KKBOX 的導覽列分解 KKBOX 的導覽列總結 參考資料">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://vkmouse.github.io/img/categories/css.png">
+<meta property="article:published_time" content="2022-09-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-28T13:26:47.230Z">
+<meta property="article:author" content="VKmouse">
+<meta property="article:tag" content="CSS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vkmouse.github.io/img/categories/css.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vkmouse.github.io/2022/09/22/Introduction_to_CSS_BEM_selector_naming_convention/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CSS BEM 選擇器命名規則簡介，以 KKBOX 為例',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-09-28 21:26:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/top_img.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/top_img.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">VKmouse</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CSS BEM 選擇器命名規則簡介，以 KKBOX 為例</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-09-21T16:00:00.000Z" title="Created 2022-09-22 00:00:00">2022-09-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-09-28T13:26:47.230Z" title="Updated 2022-09-28 21:26:47">2022-09-28</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>剛開始寫 CSS 時，我們都知道要有意義的命名，但即使命名都有自己的意義，卻發現選擇器之間有很多重複的屬性，完成第一份作業後，就有問彭彭老師，老師就提到選擇器的命名規則是滿值得討論的議題，並讓我查詢「css bem naming」，我就開始調查，CSS 怎麼樣才是好命名，並查學習一些常見網頁的命名方式。  </p>
+<ul>
+<li>重要的命名觀念</li>
+<li>BEM</li>
+<li>KKBOX 的導覽列分解</li>
+<li>KKBOX 的導覽列總結</li>
+<li>參考資料</li>
+</ul>
+<h3 id="重要的命名觀念"><a href="#重要的命名觀念" class="headerlink" title="重要的命名觀念"></a>重要的命名觀念</h3><ol>
+<li>抽象化命名，例如: <code>left</code> 就只能放在左邊，改為 <code>aside</code> 就可以放在左右</li>
+<li>避免針對性命名，例如: 作業的歡迎橫幅 <code>welcome</code>，可以改為 <code>banner</code> 內容就不一定是歡迎</li>
+<li>狀態命名，例如: 導航欄連結在當前頁面狀態 <code>menu-item</code> 加上 <code>is-active</code>，其他頁面則只有 <code>menu-item</code></li>
+</ol>
+<h3 id="BEM"><a href="#BEM" class="headerlink" title="BEM"></a>BEM</h3><p>  Block Element Modifier (BEM) 是一種為了讓 CSS 類別更好維護的<strong>命名方式</strong></p>
+<ol>
+<li><p>Block 區塊 <code>.block &#123;&#125;</code></p>
+<p> 主要負責描述大範圍功能，例如 <code>header</code> 或 <code>container</code></p>
+</li>
+<li><p>Element 元素 <code>.block__element &#123;&#125;</code></p>
+<p> 區塊的小部分，區塊可以不包含元素，但元素一定要包含在區塊，用於表達目的，中間用<strong>雙底線</strong>連結<br> 例如 <code>list__item</code> 或 <code>navbar__toggler</code></p>
+</li>
+<li><p>Modifier 修飾器 <code>.block__element--modifier &#123;&#125;</code></p>
+<p> 區塊或元素的狀態，同一個區塊或元素可能有多種狀態，使用修飾器表達，中間用<strong>雙中線</strong>連結<br> 例如 <code>nav__item--active</code>、<code>star--active</code> 或 <code>star--inactive</code></p>
+</li>
+</ol>
+<h3 id="KKBOX-的導覽列分解"><a href="#KKBOX-的導覽列分解" class="headerlink" title="KKBOX 的導覽列分解"></a>KKBOX 的導覽列分解</h3><ol>
+<li><p>KKBOX 導覽列分為兩個選擇器，並在寬度 1024 切換</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Mobile</th>
+<th>Desktop</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0 ~ 1024</td>
+<td><code>display: flex</code></td>
+<td><code>display: none</code></td>
+</tr>
+<tr>
+<td>1024 ~</td>
+<td><code>display: none</code></td>
+<td><code>display: flex</code></td>
+</tr>
+</tbody></table>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pm-header</span><br><span class="line">├─ pm-mobile-header</span><br><span class="line">└─ pm-desktop-header</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-header.png" alt="pm-header"></td>
+</tr>
+<tr>
+<td align="center">圖1 pm-header</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-desktop-header.png" alt="pm-desktop-header"></td>
+</tr>
+<tr>
+<td align="center">圖2 pm-desktop-header</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-mobile-header.png" alt="pm-mobile-header"></td>
+</tr>
+<tr>
+<td align="center">圖3 pm-mobile-header</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>桌面版本裡面的 pm-container 有兩個區塊，位於旁邊的 pm-header-aside，和位於另一端的 pm-header-menu</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pm-header</span><br><span class="line">├─ pm-mobile-header</span><br><span class="line">└─ pm-desktop-header</span><br><span class="line">   └─ pm-container*</span><br><span class="line">      ├─ pm-header-aside*</span><br><span class="line">      └─ pm-header-menu*</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-container.png" alt="pm-container"></td>
+</tr>
+<tr>
+<td align="center">圖4 pm-container</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-header-aside.png" alt="pm-header-aside"></td>
+</tr>
+<tr>
+<td align="center">圖5 pm-header-aside</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-header-menu.png" alt="pm-header-menu"></td>
+</tr>
+<tr>
+<td align="center">圖6 pm-header-menu</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>在旁邊的 pm-header-aside 裡面只有一個 pm-logo</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pm-header</span><br><span class="line">├─ pm-mobile-header</span><br><span class="line">└─ pm-desktop-header</span><br><span class="line">   └─ pm-container-menu</span><br><span class="line">      ├─ pm-header-aside</span><br><span class="line">      |  └─ pm-logo*</span><br><span class="line">      └─ pm-header-menu</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-logo.png" alt="pm-logo"></td>
+</tr>
+<tr>
+<td align="center">圖7 pm-logo</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>而 pm-header-menu 包含的東西就比要多，有 pm-drop-down、pm-search-button 和普通的 a</p>
+<ul>
+<li>pm-drop-down: 下拉式選單，例如: 特色功能、娛樂情報等</li>
+<li>pm-search-button: 搜尋按鈕</li>
+<li>a: 非下拉式選單，例如: 訂閱方案和下載</li>
+</ul>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pm-header</span><br><span class="line">├─ pm-mobile-header</span><br><span class="line">└─ pm-desktop-header</span><br><span class="line">   └─ pm-container-menu</span><br><span class="line">      ├─ pm-header-aside</span><br><span class="line">      |  └─ pm-logo</span><br><span class="line">      └─ pm-header-menu</span><br><span class="line">         ├─ pm-drop-down*</span><br><span class="line">         ├─ pm-search-button*</span><br><span class="line">         └─ a*</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-drop-down.png" alt="pm-drop-down"></td>
+</tr>
+<tr>
+<td align="center">圖8 pm-drop-down</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-search-button.png" alt="pm-search-button"></td>
+</tr>
+<tr>
+<td align="center">圖9 pm-search-button</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-normal.png" alt="pm-normal"> <img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-download.png" alt="pm-download"></td>
+</tr>
+<tr>
+<td align="center">圖10 普通的 a</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>利用狀態顯示顏色，像是搜尋按鈕和下載都是藍色，使用選擇器 pm-highlight</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-search-button.png" alt="pm-search-button"></td>
+</tr>
+<tr>
+<td align="center">圖11 帶有 pm-highlight 的 pm-search-button</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-download.png" alt="pm-download"></td>
+</tr>
+<tr>
+<td align="center">圖12 帶有 pm-highlight 的 a</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>接下來介紹 pm-mobile-header，裡面都是圖片 pm-menu-icon、pm-search-icon、pm-logo<br>其中 pm-logo 是 mobile 和 desktop 共用選擇器</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pm-header</span><br><span class="line">├─ pm-mobile-header</span><br><span class="line">|  ├─ pm-menu-icon*</span><br><span class="line">|  ├─ pm-search-icon*</span><br><span class="line">|  └─ pm-logo*</span><br><span class="line">└─ pm-desktop-header</span><br><span class="line">   └─ pm-container-menu</span><br><span class="line">      ├─ pm-header-aside</span><br><span class="line">      |    └─ pm-logo</span><br><span class="line">      └─ pm-header-menu</span><br><span class="line">         ├─ pm-drop-down</span><br><span class="line">         ├─ pm-search-button</span><br><span class="line">         └─ a</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-menu-icon.png" alt="pm-menu-icon"></td>
+</tr>
+<tr>
+<td align="center">圖13 pm-menu-icon</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-search-icon.png" alt="pm-search-icon"></td>
+</tr>
+<tr>
+<td align="center">圖14 pm-search-icon</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-logo-m.png" alt="pm-logo-m"></td>
+</tr>
+<tr>
+<td align="center">圖15 pm-logo</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>最後，當 pm-menu-icon 和 pm-search-icon 被點擊都會展開左或右側的菜單，所以他們都有狀態 pm-active，<br>這個狀態將背景圖片都改為叉叉，複寫原本的選單或放大鏡</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-menu-icon-active.png" alt="pm-menu-icon-active"></td>
+</tr>
+<tr>
+<td align="center">圖16 帶有 pm-active 的 pm-menu-icon</td>
+</tr>
+<tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_CSS_BEM_selector_naming_convention/pm-search-icon-active.png" alt="pm-search-icon-active"></td>
+</tr>
+<tr>
+<td align="center">圖17 帶有 pm-active 的 pm-search-icon</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<h3 id="KKBOX-的導覽列總結"><a href="#KKBOX-的導覽列總結" class="headerlink" title="KKBOX 的導覽列總結"></a>KKBOX 的導覽列總結</h3><p>用 BEM 角度看 KKBOX 的導覽列，從中看到 Block 中都是可被單一重複使用，Element 需要依賴在特定 Block 之下，Modifier 則可以直接附加在 Block 或 Element</p>
+<ul>
+<li>Block: pm-header、pm-menu-icon、pm-search-icon、pm-logo、pm-drop-down、pm-search-button</li>
+<li>Element<ul>
+<li>pm-header 的 element: pm-mobile-header、pm-desktop-header</li>
+<li>pm-desktop-header 的 element: pm-header-aside、pm-header-menu</li>
+</ul>
+</li>
+<li>Modifier: pm-highlight、pm-active</li>
+</ul>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.kkbox.com/tw/tc/">KKBOX</a></li>
+<li><a target="_blank" rel="noopener" href="https://chupainotebook.blogspot.com/2019/05/bemcss.html">竹白記事本-BEM，CSS 設計模式</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.casper.tw/css/2016/12/05/css-naming/">鐵人賽 5 - CSS 的命名技巧</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io">VKmouse</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io/2022/09/22/Introduction_to_CSS_BEM_selector_naming_convention/">https://vkmouse.github.io/2022/09/22/Introduction_to_CSS_BEM_selector_naming_convention/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CSS/">CSS</a></div><div class="post_share"><div class="social-share" data-image="/img/categories/css.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/09/25/Introduction_to_Git_Version_Control/"><img class="prev-cover" src="/img/categories/git.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Git 版本控制介紹</div></div></a></div><div class="next-post pull-right"><a href="/1900/01/01/FinalProject/"><img class="next-cover" src="/img/top_img.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Final Project Concept</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9A%84%E5%91%BD%E5%90%8D%E8%A7%80%E5%BF%B5"><span class="toc-text">重要的命名觀念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BEM"><span class="toc-text">BEM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KKBOX-%E7%9A%84%E5%B0%8E%E8%A6%BD%E5%88%97%E5%88%86%E8%A7%A3"><span class="toc-text">KKBOX 的導覽列分解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KKBOX-%E7%9A%84%E5%B0%8E%E8%A6%BD%E5%88%97%E7%B8%BD%E7%B5%90"><span class="toc-text">KKBOX 的導覽列總結</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理"><img src="/img/categories/aws.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AWS S3 上傳下載權限管理"/></a><div class="content"><a class="title" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理">AWS S3 上傳下載權限管理</a><time datetime="2022-11-27T09:00:00.000Z" title="Created 2022-11-27 17:00:00">2022-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"/></a><div class="content"><a class="title" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)">使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)</a><time datetime="2022-11-19T10:00:00.000Z" title="Created 2022-11-19 18:00:00">2022-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH"><img src="/img/categories/ssh.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在 Windows 安裝 OpenSSH"/></a><div class="content"><a class="title" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH">在 Windows 安裝 OpenSSH</a><time datetime="2022-11-13T08:00:00.000Z" title="Created 2022-11-13 16:00:00">2022-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NGINX 架設靜態檔案伺服器"/></a><div class="content"><a class="title" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器">NGINX 架設靜態檔案伺服器</a><time datetime="2022-11-04T08:00:00.000Z" title="Created 2022-11-04 16:00:00">2022-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例"><img src="/img/categories/windows10.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="環境變數介紹，以 Windows 10 為例"/></a><div class="content"><a class="title" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例">環境變數介紹，以 Windows 10 為例</a><time datetime="2022-11-01T10:00:00.000Z" title="Created 2022-11-01 18:00:00">2022-11-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/top_img.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By VKmouse</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div></div></body></html>

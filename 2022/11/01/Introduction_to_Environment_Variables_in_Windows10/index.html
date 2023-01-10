@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="zh-tw" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>環境變數介紹，以 Windows 10 為例 | VKmouse</title><meta name="keywords" content="windows10"><meta name="author" content="VKmouse"><meta name="copyright" content="VKmouse"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本篇文章以 Windows 的工作管理員和命令提示字元，介紹 Windows 環境變數。  程序 (Process) 環境變數 PATH 環境變數  程序 (Process) 程序是指程式載入記憶體之後被稱為程序，例如 Windows 的 cmd.exe 載入記憶體 在 Windows 中，工作管理員可以看到目前正在執行的程序，和更多細節。 程序識別碼 (Process Identifier, P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="環境變數介紹，以 Windows 10 為例">
+<meta property="og:url" content="https://vkmouse.github.io/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/index.html">
+<meta property="og:site_name" content="VKmouse">
+<meta property="og:description" content="本篇文章以 Windows 的工作管理員和命令提示字元，介紹 Windows 環境變數。  程序 (Process) 環境變數 PATH 環境變數  程序 (Process) 程序是指程式載入記憶體之後被稱為程序，例如 Windows 的 cmd.exe 載入記憶體 在 Windows 中，工作管理員可以看到目前正在執行的程序，和更多細節。 程序識別碼 (Process Identifier, P">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://vkmouse.github.io/img/categories/windows10.png">
+<meta property="article:published_time" content="2022-11-01T10:00:00.000Z">
+<meta property="article:modified_time" content="2022-11-01T23:36:27.014Z">
+<meta property="article:author" content="VKmouse">
+<meta property="article:tag" content="windows10">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vkmouse.github.io/img/categories/windows10.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vkmouse.github.io/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '環境變數介紹，以 Windows 10 為例',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-11-02 07:36:27'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/top_img.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/top_img.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">VKmouse</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">環境變數介紹，以 Windows 10 為例</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-11-01T10:00:00.000Z" title="Created 2022-11-01 18:00:00">2022-11-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-11-01T23:36:27.014Z" title="Updated 2022-11-02 07:36:27">2022-11-02</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>本篇文章以 Windows 的工作管理員和命令提示字元，介紹 Windows 環境變數。</p>
+<ul>
+<li>程序 (Process)</li>
+<li>環境變數</li>
+<li>PATH 環境變數</li>
+</ul>
+<h2 id="程序-Process"><a href="#程序-Process" class="headerlink" title="程序 (Process)"></a>程序 (Process)</h2><ul>
+<li>程序是指<strong>程式載入記憶體</strong>之後被稱為程序，例如 Windows 的 cmd.exe 載入記憶體</li>
+<li>在 Windows 中，<strong>工作管理員可以看到目前正在執行的程序</strong>，和更多細節。</li>
+<li>程序識別碼 (Process Identifier, PID)、CPU、記憶體使用量等。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_Environment_Variables_in_Windows10/1.png" alt="1"></td>
+</tr>
+<tr>
+<td align="center">圖1 命令提示字元和程序</td>
+</tr>
+</tbody></table>
+<h2 id="環境變數"><a href="#環境變數" class="headerlink" title="環境變數"></a>環境變數</h2><p><strong>環境變數</strong>可以分為兩個部分解釋，<strong>環境</strong>和<strong>變數</strong>。</p>
+<ul>
+<li><strong>環境</strong>是指作業系統，Windows 是目前的環境，環境下的<strong>程序可以讀取環境變數</strong>。</li>
+<li><strong>變數</strong>視為是一個容器，可以裝入符合的內容，環境變數內容是<strong>文字</strong>，所以<strong>環境變數是可以裝各種文字的變數</strong>。</li>
+</ul>
+<h3 id="Windows-的環境變數"><a href="#Windows-的環境變數" class="headerlink" title="Windows 的環境變數"></a>Windows 的環境變數</h3><ul>
+<li>一個環境變數包含<strong>變數</strong>和<strong>值</strong></li>
+<li><strong>變數</strong>: 環境變數的名稱</li>
+<li><strong>值</strong>: 環境變數的實際數值</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_Environment_Variables_in_Windows10/2.png" alt="2"></td>
+</tr>
+<tr>
+<td align="center">圖2 Windows 環境變數</td>
+</tr>
+</tbody></table>
+<ul>
+<li>任何運作於作業系統的程序都可以讀取環境變數</li>
+<li>以 cmd.exe 為例讀取環境變數</li>
+<li><code>ECHO %OS%</code>: 使用 <code>ECHO</code> 指令將 <code>OS</code> 這個環境變數的數值，顯示在命令提示字元介面上</li>
+<li><code>ECHO %USERPORFILE%</code>: 當前使用者的路徑</li>
+<li><code>ECHO %SYSTEMROOT%</code>: Windows 系統文件夾位置</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://vkmouse.github.io/img/post/Introduction_to_Environment_Variables_in_Windows10/3.png" alt="3"></td>
+</tr>
+<tr>
+<td align="center">圖3 命令提示字元讀取環境變數</td>
+</tr>
+</tbody></table>
+<h2 id="PATH-環境變數"><a href="#PATH-環境變數" class="headerlink" title="PATH 環境變數"></a>PATH 環境變數</h2><ul>
+<li>系統在讀取命令時，會先讀取當前路徑，若當前路徑找不到，會去 <strong>PATH 環境變數裡的每個目錄底下搜尋命令</strong></li>
+<li>PATH 環境變數是<strong>從指定目錄搜尋命令</strong> (參考: <a target="_blank" rel="noopener" href="https://www.ibm.com/docs/hr/aix/7.1?topic=accounts-path-environment-variable">PATH environment variable - IBM</a>)</li>
+<li>PATH 環境變數是<strong>指定搜尋可執行檔 (.exe) 的目錄集合</strong> (參考: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/path">path | Microsoft Learn</a>)</li>
+</ul>
+<h3 id="不使用-PATH-環境變數執行命令"><a href="#不使用-PATH-環境變數執行命令" class="headerlink" title="不使用 PATH 環境變數執行命令"></a>不使用 PATH 環境變數執行命令</h3><p>我們有兩種方式下達命令</p>
+<ol>
+<li>讓命令提示字元到程式所在目錄，例如: <code>cd C:\Windows\system32 &amp; cmd.exe</code> </li>
+<li>輸入程式完整路徑，例如: <code>C:\Windows\system32\cmd.exe</code></li>
+</ol>
+<p>若不滿足上述其中一種，命令不知道該怎麼執行，會發生 <code>&#39;xxxxx&#39; 不是內部或外部命令、可執行的程式或批次檔。</code></p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><ul>
+<li>環境變數可以是各種文字</li>
+<li>程序可以讀取環境變數</li>
+<li>在執行命令時，PATH 環境變數裡的每個目錄都會被搜尋</li>
+</ul>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/path">path | Microsoft Learn</a><br><a target="_blank" rel="noopener" href="https://www.ibm.com/docs/hr/aix/7.1?topic=accounts-path-environment-variable">PATH environment variable - IBM</a><br><a target="_blank" rel="noopener" href="https://totoroliu.medium.com/program-process-thread-%E5%B7%AE%E7%95%B0-4a360c7345e5">Program&#x2F;Process&#x2F;Thread 差異</a><br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-tw/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">Wiki-環境變數</a><br><a target="_blank" rel="noopener" href="https://shaochien.gitbooks.io/command-line-and-environment-variable-tutorial/content/environment-variable.html">環境變數 (Environment Variable)</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io">VKmouse</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/">https://vkmouse.github.io/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/windows10/">windows10</a></div><div class="post_share"><div class="social-share" data-image="/img/categories/windows10.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/11/04/NGNIX_Serving_Static_Content/"><img class="prev-cover" src="/img/categories/nginx.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">NGINX 架設靜態檔案伺服器</div></div></a></div><div class="next-post pull-right"><a href="/2022/10/31/Go_Programming_Language_Abstract_Class_Example/"><img class="next-cover" src="/img/categories/go.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Go 抽象類別範例</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F-Process"><span class="toc-text">程序 (Process)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8"><span class="toc-text">環境變數</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-%E7%9A%84%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8"><span class="toc-text">Windows 的環境變數</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PATH-%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8"><span class="toc-text">PATH 環境變數</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E4%BD%BF%E7%94%A8-PATH-%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E5%9F%B7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-text">不使用 PATH 環境變數執行命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B8%BD%E7%B5%90"><span class="toc-text">總結</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理"><img src="/img/categories/aws.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AWS S3 上傳下載權限管理"/></a><div class="content"><a class="title" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理">AWS S3 上傳下載權限管理</a><time datetime="2022-11-27T09:00:00.000Z" title="Created 2022-11-27 17:00:00">2022-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"/></a><div class="content"><a class="title" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)">使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)</a><time datetime="2022-11-19T10:00:00.000Z" title="Created 2022-11-19 18:00:00">2022-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH"><img src="/img/categories/ssh.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在 Windows 安裝 OpenSSH"/></a><div class="content"><a class="title" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH">在 Windows 安裝 OpenSSH</a><time datetime="2022-11-13T08:00:00.000Z" title="Created 2022-11-13 16:00:00">2022-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NGINX 架設靜態檔案伺服器"/></a><div class="content"><a class="title" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器">NGINX 架設靜態檔案伺服器</a><time datetime="2022-11-04T08:00:00.000Z" title="Created 2022-11-04 16:00:00">2022-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例"><img src="/img/categories/windows10.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="環境變數介紹，以 Windows 10 為例"/></a><div class="content"><a class="title" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例">環境變數介紹，以 Windows 10 為例</a><time datetime="2022-11-01T10:00:00.000Z" title="Created 2022-11-01 18:00:00">2022-11-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/top_img.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By VKmouse</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div></div></body></html>
