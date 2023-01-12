@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="zh-tw" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>AWS S3 上傳下載權限管理 | VKmouse</title><meta name="keywords" content="AWS"><meta name="author" content="VKmouse"><meta name="copyright" content="VKmouse"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本篇文章說明 AWS S3 的上傳下載方式，使用 postman 作為範例，設定限定上傳的權限，開放所有下載的權限 建立 Bucket 建立 Bucket  填入名稱、區域  其他使用預設值   建立資料夾 建立資料夾  填入名稱 BUCKET_FOLDER (e.g. images)  建立成功   建立 IAM 使用者 到 IAM 儀表板  點擊使用者  填入使用者名稱 IAM_UESRNAM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS S3 上傳下載權限管理">
+<meta property="og:url" content="https://vkmouse.github.io/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/index.html">
+<meta property="og:site_name" content="VKmouse">
+<meta property="og:description" content="本篇文章說明 AWS S3 的上傳下載方式，使用 postman 作為範例，設定限定上傳的權限，開放所有下載的權限 建立 Bucket 建立 Bucket  填入名稱、區域  其他使用預設值   建立資料夾 建立資料夾  填入名稱 BUCKET_FOLDER (e.g. images)  建立成功   建立 IAM 使用者 到 IAM 儀表板  點擊使用者  填入使用者名稱 IAM_UESRNAM">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://vkmouse.github.io/img/categories/aws.png">
+<meta property="article:published_time" content="2022-11-27T09:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-12T05:57:45.147Z">
+<meta property="article:author" content="VKmouse">
+<meta property="article:tag" content="AWS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vkmouse.github.io/img/categories/aws.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vkmouse.github.io/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'AWS S3 上傳下載權限管理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-01-12 13:57:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/top_img.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/top_img.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">VKmouse</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">AWS S3 上傳下載權限管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-11-27T09:00:00.000Z" title="Created 2022-11-27 17:00:00">2022-11-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-01-12T05:57:45.147Z" title="Updated 2023-01-12 13:57:45">2023-01-12</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>本篇文章說明 AWS S3 的上傳下載方式，使用 postman 作為範例，設定限定上傳的權限，開放所有下載的權限</p>
+<h2 id="建立-Bucket"><a href="#建立-Bucket" class="headerlink" title="建立 Bucket"></a>建立 Bucket</h2><ol>
+<li><p>建立 Bucket<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateBucket1.png" alt="1"></p>
+</li>
+<li><p>填入名稱、區域<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateBucket2.png" alt="1"></p>
+</li>
+<li><p>其他使用預設值<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateBucket3.png" alt="1"><br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateBucket4.png" alt="1"><br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateBucket5.png" alt="1"><br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateBucket6.png" alt="1"></p>
+</li>
+</ol>
+<h2 id="建立資料夾"><a href="#建立資料夾" class="headerlink" title="建立資料夾"></a>建立資料夾</h2><ol>
+<li><p>建立資料夾<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateFolder1.png" alt="1"></p>
+</li>
+<li><p>填入名稱 <code>BUCKET_FOLDER</code> (e.g. images)<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateFolder2.png" alt="1"></p>
+</li>
+<li><p>建立成功<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateFolder3.png" alt="1"></p>
+</li>
+</ol>
+<h2 id="建立-IAM-使用者"><a href="#建立-IAM-使用者" class="headerlink" title="建立 IAM 使用者"></a>建立 IAM 使用者</h2><ol>
+<li><p>到 IAM 儀表板<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateIAMUser1.png" alt="1"></p>
+</li>
+<li><p>點擊使用者<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateIAMUser2.png" alt="1"></p>
+</li>
+<li><p>填入使用者名稱 <code>IAM_UESRNAME</code> (e.g. vis-trainet)，並選擇 Access Key<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateIAMUser3.png" alt="1"></p>
+</li>
+<li><p>附加現有的 Policy，選擇 S3 Full Access<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateIAMUser4.png" alt="1"></p>
+</li>
+<li><p>Tag 留空<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateIAMUser5.png" alt="1"></p>
+</li>
+<li><p>下一步<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateIAMUser6.png" alt="1"></p>
+</li>
+<li><p>成功後會取得 <code>Access key ID</code> 和 <code>Secret access key</code>，後續會使用到<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/CreateIAMUser7.png" alt="1"></p>
+</li>
+</ol>
+<h2 id="修改權限"><a href="#修改權限" class="headerlink" title="修改權限"></a>修改權限</h2><ol>
+<li><p>修改 bucket setting，後面兩個選項關閉<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/ModifyAuth1.png" alt="1"></p>
+</li>
+<li><p>修改 bucket policy<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/ModifyAuth2.png" alt="1"></p>
+</li>
+<li><p>回到 IAM 取得 <code>USER_ARN</code><br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/ModifyAuth3.png" alt="1"></p>
+</li>
+<li><p>貼上 statement 並取代為自己的 User ARN，上面是開啟 Get 權限給匿名使用者，下面是開啟 Put 權限給 IAM 使用者，更多設定 Principal <a href="!https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/s3-bucket-user-policy-specifying-principal-intro.html">參考</a><br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/ModifyAuth4.png" alt="1"></p>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;Sid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GetObjectStatement&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Principal&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;s3:GetObject&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:s3:::BUCKET_NAME/BUCKET_FOLDER/*&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;Sid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;PutObjectStatement&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Principal&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;AWS&quot;</span><span class="punctuation">:</span> <span class="string">&quot;USER_ARN&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;s3:PutObject&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:s3:::BUCKET_NAME/BUCKET_FOLDER/*&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="上傳下載測試"><a href="#上傳下載測試" class="headerlink" title="上傳下載測試"></a>上傳下載測試</h2><ol>
+<li>使用 Postman 上傳，選擇 <code>PUT</code> 方法</li>
+<li>上傳網址 <code>https://BUCKET_NAME.s3.amazonaws.com/BUCKET_FOLDER/20200524_006.png</code></li>
+<li>Auth 選擇型態 AWS Signature 填入 IAM 使用者的 <code>Access key ID</code> 和 <code>Secret access key</code></li>
+</ol>
+<p><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/upload1.png" alt="1"></p>
+<ol start="4">
+<li><p>Body 選擇檔案後進行上傳<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/upload2.png" alt="1"></p>
+</li>
+<li><p>測試剛才上傳位置<br><img src="https://vkmouse.github.io/img/post/Upload_and_Download_Permission_Management_for_AWS_S3/download.png" alt="1"></p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io">VKmouse</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/">https://vkmouse.github.io/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AWS/">AWS</a></div><div class="post_share"><div class="social-share" data-image="/img/categories/aws.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/"><img class="next-cover" src="/img/categories/nginx.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B-Bucket"><span class="toc-text">建立 Bucket</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E8%B3%87%E6%96%99%E5%A4%BE"><span class="toc-text">建立資料夾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B-IAM-%E4%BD%BF%E7%94%A8%E8%80%85"><span class="toc-text">建立 IAM 使用者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%AC%8A%E9%99%90"><span class="toc-text">修改權限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E5%82%B3%E4%B8%8B%E8%BC%89%E6%B8%AC%E8%A9%A6"><span class="toc-text">上傳下載測試</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理"><img src="/img/categories/aws.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AWS S3 上傳下載權限管理"/></a><div class="content"><a class="title" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理">AWS S3 上傳下載權限管理</a><time datetime="2022-11-27T09:00:00.000Z" title="Created 2022-11-27 17:00:00">2022-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"/></a><div class="content"><a class="title" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)">使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)</a><time datetime="2022-11-19T10:00:00.000Z" title="Created 2022-11-19 18:00:00">2022-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH"><img src="/img/categories/ssh.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在 Windows 安裝 OpenSSH"/></a><div class="content"><a class="title" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH">在 Windows 安裝 OpenSSH</a><time datetime="2022-11-13T08:00:00.000Z" title="Created 2022-11-13 16:00:00">2022-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NGINX 架設靜態檔案伺服器"/></a><div class="content"><a class="title" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器">NGINX 架設靜態檔案伺服器</a><time datetime="2022-11-04T08:00:00.000Z" title="Created 2022-11-04 16:00:00">2022-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例"><img src="/img/categories/windows10.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="環境變數介紹，以 Windows 10 為例"/></a><div class="content"><a class="title" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例">環境變數介紹，以 Windows 10 為例</a><time datetime="2022-11-01T10:00:00.000Z" title="Created 2022-11-01 18:00:00">2022-11-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/top_img.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By VKmouse</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div></div></body></html>

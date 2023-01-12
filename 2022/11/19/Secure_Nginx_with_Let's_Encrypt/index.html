@@ -1,0 +1,225 @@
+<!DOCTYPE html><html lang="zh-tw" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX) | VKmouse</title><meta name="keywords" content="nginx"><meta name="author" content="VKmouse"><meta name="copyright" content="VKmouse"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本篇文章簡介 Let’s Encrypt 這個「證書頒發機構」(Certificate authority, CA)，並使用他和 Nginx 架設 HTTPS 伺服器。 參考申請Let’s Encrypt 憑證與啟用 https (Nginx) 和官方文獻 Let’s Encrypt 介紹Let’s Encrypt 提供哪些服務Let’s Encrypt 是一家全球性的憑證頒發機構 (Certif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Let&#39;s Encrypt 架設 HTTPS 伺服器 (NGINX)">
+<meta property="og:url" content="https://vkmouse.github.io/2022/11/19/Secure_Nginx_with_Let's_Encrypt/index.html">
+<meta property="og:site_name" content="VKmouse">
+<meta property="og:description" content="本篇文章簡介 Let’s Encrypt 這個「證書頒發機構」(Certificate authority, CA)，並使用他和 Nginx 架設 HTTPS 伺服器。 參考申請Let’s Encrypt 憑證與啟用 https (Nginx) 和官方文獻 Let’s Encrypt 介紹Let’s Encrypt 提供哪些服務Let’s Encrypt 是一家全球性的憑證頒發機構 (Certif">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://vkmouse.github.io/img/categories/nginx.png">
+<meta property="article:published_time" content="2022-11-19T10:00:00.000Z">
+<meta property="article:modified_time" content="2022-11-19T11:33:31.290Z">
+<meta property="article:author" content="VKmouse">
+<meta property="article:tag" content="nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vkmouse.github.io/img/categories/nginx.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vkmouse.github.io/2022/11/19/Secure_Nginx_with_Let's_Encrypt/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用 Let\'s Encrypt 架設 HTTPS 伺服器 (NGINX)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-11-19 19:33:31'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/top_img.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/top_img.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">VKmouse</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-11-19T10:00:00.000Z" title="Created 2022-11-19 18:00:00">2022-11-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-11-19T11:33:31.290Z" title="Updated 2022-11-19 19:33:31">2022-11-19</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>本篇文章簡介 Let’s Encrypt 這個「證書頒發機構」(Certificate authority, CA)，並使用他和 Nginx 架設 HTTPS 伺服器。</p>
+<p>參考<a target="_blank" rel="noopener" href="https://xenby.com/b/101-%E6%95%99%E5%AD%B8-%E7%94%B3%E8%AB%8Blets-encrypt%E6%86%91%E8%AD%89%E8%88%87%E5%95%9F%E7%94%A8https-nginx">申請Let’s Encrypt 憑證與啟用 https (Nginx) </a>和<a target="_blank" rel="noopener" href="https://letsencrypt.org/zh-tw/docs/">官方文獻</a></p>
+<h2 id="Let’s-Encrypt-介紹"><a href="#Let’s-Encrypt-介紹" class="headerlink" title="Let’s Encrypt 介紹"></a>Let’s Encrypt 介紹</h2><h3 id="Let’s-Encrypt-提供哪些服務"><a href="#Let’s-Encrypt-提供哪些服務" class="headerlink" title="Let’s Encrypt 提供哪些服務"></a>Let’s Encrypt 提供哪些服務</h3><p>Let’s Encrypt 是一家全球性的憑證頒發機構 (Certificate Authority, CA)<br>Let’s Encrypt 提供域名驗證型憑證 (Domain Validation, DV)</p>
+<h3 id="如何設定-https-的流程"><a href="#如何設定-https-的流程" class="headerlink" title="如何設定 https 的流程"></a>如何設定 https 的流程</h3><p>流程分為兩個步驟：</p>
+<ol>
+<li>管理軟體會先向 CA 證明伺服器擁有網域的所有權。</li>
+<li>管理系統就可以替該網域申請、更新或註銷憑證。</li>
+</ol>
+<h3 id="證明網域的所有權"><a href="#證明網域的所有權" class="headerlink" title="證明網域的所有權"></a>證明網域的所有權</h3><p>憑證管理軟體: 自己的伺服器上的軟體</p>
+<h4 id="憑證管理軟體首次向-Let’s-Encrypt-溝通"><a href="#憑證管理軟體首次向-Let’s-Encrypt-溝通" class="headerlink" title="憑證管理軟體首次向 Let’s Encrypt 溝通"></a>憑證管理軟體首次向 Let’s Encrypt 溝通</h4><ul>
+<li>產生一組公私金鑰</li>
+<li>向 CA 證明自己管理一或多個網域</li>
+</ul>
+<h4 id="Let’s-Encrypt-CA-會考驗"><a href="#Let’s-Encrypt-CA-會考驗" class="headerlink" title="Let’s Encrypt CA 會考驗"></a>Let’s Encrypt CA 會考驗</h4><ol>
+<li><p>Let’s Encrypt 還提供了一個隨機，要求憑證管理軟體必須用它所產生的私鑰，對隨機數進行簽名</p>
+</li>
+<li><p>CA 會檢查隨機數上的簽名，並且下載在放網頁伺服器上的文件，以確認文件內容。</p>
+</li>
+</ol>
+<h3 id="憑證的頒發和註銷"><a href="#憑證的頒發和註銷" class="headerlink" title="憑證的頒發和註銷"></a>憑證的頒發和註銷</h3><p>憑證的頒發: 只需要發送憑證管理請求，並用授權金鑰對簽名</p>
+<h3 id="快速入門頁面"><a href="#快速入門頁面" class="headerlink" title="快速入門頁面"></a>快速入門頁面</h3><p>採用 Certbot 這個 ACME 客戶端，它可以自動執行憑證的頒發、安裝，甚至不需要停止你的伺服器。</p>
+<h3 id="專業術語"><a href="#專業術語" class="headerlink" title="專業術語"></a>專業術語</h3><ul>
+<li>ACME (Automatic Certificate Management Environment) : 自動憑證管理環境。</li>
+<li>Boulder : 由 Let’s Encrypt 開發和使用，以實作 ACME 協議的軟體。GitHub</li>
+<li>CA Issuers : CA 頒發者。</li>
+<li>Certificate : 憑證。一個使用 X.509 格式的文件，內容包含公鑰和如何使用這把公鑰的資訊。</li>
+<li>Certificate Authority (CA) : 憑證頒發機構。Let’s Encrypt、IdenTrust、Sectigo 和 DigiCert 都是憑證頒發機構。</li>
+<li>DNS-based Authentication of Named Entities (DANE) : 基於 DNS 的域名實體認證。一個網路安全協定，使用 DNS 來告訴客戶端該如何驗證憑證真偽，以及是否有提供加密公鑰。</li>
+<li>ECDSA (Elliptic Curve Digital Signature Algorithm) : 橢圓曲線數位簽名演算法。</li>
+<li>Ed25519 : 一種特殊類型的 EdDSA，類似還的還有 Ed448。</li>
+<li>EdDSA (Edwards-curve Digital Signature Algorithm) : 現代基於橢圓曲線的公鑰簽名演算法，</li>
+<li>Extended Validation (EV) : 擴展驗證。一種憑證驗證方式，CA 會驗證法律實體是否有網站的控制權。</li>
+</ul>
+<h2 id="使用-Let’s-Encrypt-架設-HTTPS-伺服器-NGINX"><a href="#使用-Let’s-Encrypt-架設-HTTPS-伺服器-NGINX" class="headerlink" title="使用 Let’s Encrypt 架設 HTTPS 伺服器 (NGINX)"></a>使用 Let’s Encrypt 架設 HTTPS 伺服器 (NGINX)</h2><h3 id="安裝-nginx"><a href="#安裝-nginx" class="headerlink" title="安裝 nginx"></a>安裝 nginx</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt install nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="安裝-Certbot"><a href="#安裝-Certbot" class="headerlink" title="安裝 Certbot"></a>安裝 Certbot</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:certbot/certbot</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install certbot</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改-Nginx-設定"><a href="#修改-Nginx-設定" class="headerlink" title="修改 Nginx 設定"></a>修改 Nginx 設定</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/nginx/sites-available/default</span><br></pre></td></tr></table></figure>
+
+<p>在 server block 新增 well-known 路徑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80 default_server;</span><br><span class="line">    listen [::]:80 default_server;</span><br><span class="line"></span><br><span class="line">    location ~ /.well-known &#123;</span><br><span class="line">        allow all;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="驗證-Nginx-設定檔並重啟"><a href="#驗證-Nginx-設定檔並重啟" class="headerlink" title="驗證 Nginx 設定檔並重啟"></a>驗證 Nginx 設定檔並重啟</h3><p>驗證設定檔案</p>
+<p>成功訊息: <code>nginx: configuration file /etc/nginx/nginx.conf test is successful</code><br>失敗訊息: <code>nginx: configuration file /etc/nginx/nginx.conf test failed</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx -t</span><br></pre></td></tr></table></figure>
+
+<p>驗證成功後重新啟動</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="申請憑證"><a href="#申請憑證" class="headerlink" title="申請憑證"></a>申請憑證</h3><p>要替換成自己的網域，例如: <code>example.com</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo certbot certonly --webroot --register-unsafely-without-email --webroot-path=/var/www/html -d DOMAIN</span><br></pre></td></tr></table></figure>
+
+<p>增加安全性使用指令產生 <code>/etc/ssl/certs/dhparam.pem</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048</span><br></pre></td></tr></table></figure>
+
+<h3 id="設定-Nginx-憑證"><a href="#設定-Nginx-憑證" class="headerlink" title="設定 Nginx 憑證"></a>設定 Nginx 憑證</h3><h4 id="設定-etc-nginx-snippets-ssl-DOMAIN-conf"><a href="#設定-etc-nginx-snippets-ssl-DOMAIN-conf" class="headerlink" title="設定 /etc/nginx/snippets/ssl-DOMAIN.conf"></a>設定 <code>/etc/nginx/snippets/ssl-DOMAIN.conf</code></h4><p>要替換成自己的網域，例如: <code>example.com</code></p>
+<p>開啟檔案輸入 <code>/etc/nginx/snippets/ssl-DOMAIN.conf</code> 以下內容</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/nginx/snippets/ssl-DOMAIN.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssl_certificate /etc/letsencrypt/live/DOMAIN/fullchain.pem;</span><br><span class="line">ssl_certificate_key /etc/letsencrypt/live/DOMAIN/privkey.pem;</span><br></pre></td></tr></table></figure>
+
+<h4 id="設定-etc-nginx-snippets-ssl-params-conf"><a href="#設定-etc-nginx-snippets-ssl-params-conf" class="headerlink" title="設定 /etc/nginx/snippets/ssl-params.conf"></a>設定 <code>/etc/nginx/snippets/ssl-params.conf</code></h4><p>開啟檔案輸入 <code>/etc/nginx/snippets/ssl-params.conf</code> 以下內容</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/nginx/snippets/ssl-params.conf</span><br></pre></td></tr></table></figure>
+
+<p>路徑 <code>/etc/ssl/certs/dhparam.pem</code> 要修改與上面對應路徑相同<br>resolver 設定 8.8.8.8 和 8.8.4.4 是 Google 的 DNS IP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">ssl_prefer_server_ciphers on;</span><br><span class="line">ssl_ciphers &quot;EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH&quot;;</span><br><span class="line">ssl_ecdh_curve secp384r1;</span><br><span class="line">ssl_session_cache shared:SSL:10m;</span><br><span class="line">ssl_session_tickets off;</span><br><span class="line">ssl_stapling on;</span><br><span class="line">ssl_stapling_verify on;</span><br><span class="line">resolver 8.8.8.8 8.8.4.4 valid=300s;</span><br><span class="line">resolver_timeout 5s;</span><br><span class="line">add_header X-Frame-Options DENY;</span><br><span class="line">add_header X-Content-Type-Options nosniff;</span><br><span class="line">ssl_dhparam /etc/ssl/certs/dhparam.pem;</span><br></pre></td></tr></table></figure>
+
+<h4 id="設定-etc-nginx-sites-available-default"><a href="#設定-etc-nginx-sites-available-default" class="headerlink" title="設定 /etc/nginx/sites-available/default"></a>設定 <code>/etc/nginx/sites-available/default</code></h4><p>設定原本的 server 區塊為</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl http2 default_server;</span><br><span class="line">    listen [::]:443 ssl http2 default_server;</span><br><span class="line">    include snippets/ssl-domain.com.conf;</span><br><span class="line">    include snippets/ssl-params.conf;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在外面區塊新增一個 server 區塊</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80 default_server;</span><br><span class="line">    listen [::]:80 default_server;</span><br><span class="line">    server_name domain.com www.domain.com;</span><br><span class="line">    return 301 https://$server_name$request_uri;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="驗證-Nginx-設定檔並重啟-1"><a href="#驗證-Nginx-設定檔並重啟-1" class="headerlink" title="驗證 Nginx 設定檔並重啟"></a>驗證 Nginx 設定檔並重啟</h3><p>驗證設定檔案</p>
+<p>成功訊息: <code>nginx: configuration file /etc/nginx/nginx.conf test is successful</code><br>失敗訊息: <code>nginx: configuration file /etc/nginx/nginx.conf test failed</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx -t</span><br></pre></td></tr></table></figure>
+
+<p>驗證成功後重新啟動</p>
+<pre><code class="sh">sudo systemctl restart nginx
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io">VKmouse</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://vkmouse.github.io/2022/11/19/Secure_Nginx_with_Let's_Encrypt/">https://vkmouse.github.io/2022/11/19/Secure_Nginx_with_Let's_Encrypt/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/nginx/">nginx</a></div><div class="post_share"><div class="social-share" data-image="/img/categories/nginx.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/"><img class="prev-cover" src="/img/categories/aws.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">AWS S3 上傳下載權限管理</div></div></a></div><div class="next-post pull-right"><a href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/"><img class="next-cover" src="/img/categories/ssh.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">在 Windows 安裝 OpenSSH</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器"><img class="cover" src="/img/categories/nginx.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-11-04</div><div class="title">NGINX 架設靜態檔案伺服器</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Let%E2%80%99s-Encrypt-%E4%BB%8B%E7%B4%B9"><span class="toc-text">Let’s Encrypt 介紹</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Let%E2%80%99s-Encrypt-%E6%8F%90%E4%BE%9B%E5%93%AA%E4%BA%9B%E6%9C%8D%E5%8B%99"><span class="toc-text">Let’s Encrypt 提供哪些服務</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%A8%AD%E5%AE%9A-https-%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-text">如何設定 https 的流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AD%89%E6%98%8E%E7%B6%B2%E5%9F%9F%E7%9A%84%E6%89%80%E6%9C%89%E6%AC%8A"><span class="toc-text">證明網域的所有權</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%86%91%E8%AD%89%E7%AE%A1%E7%90%86%E8%BB%9F%E9%AB%94%E9%A6%96%E6%AC%A1%E5%90%91-Let%E2%80%99s-Encrypt-%E6%BA%9D%E9%80%9A"><span class="toc-text">憑證管理軟體首次向 Let’s Encrypt 溝通</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Let%E2%80%99s-Encrypt-CA-%E6%9C%83%E8%80%83%E9%A9%97"><span class="toc-text">Let’s Encrypt CA 會考驗</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%86%91%E8%AD%89%E7%9A%84%E9%A0%92%E7%99%BC%E5%92%8C%E8%A8%BB%E9%8A%B7"><span class="toc-text">憑證的頒發和註銷</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E5%85%A5%E9%96%80%E9%A0%81%E9%9D%A2"><span class="toc-text">快速入門頁面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%88%E6%A5%AD%E8%A1%93%E8%AA%9E"><span class="toc-text">專業術語</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Let%E2%80%99s-Encrypt-%E6%9E%B6%E8%A8%AD-HTTPS-%E4%BC%BA%E6%9C%8D%E5%99%A8-NGINX"><span class="toc-text">使用 Let’s Encrypt 架設 HTTPS 伺服器 (NGINX)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D-nginx"><span class="toc-text">安裝 nginx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D-Certbot"><span class="toc-text">安裝 Certbot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-Nginx-%E8%A8%AD%E5%AE%9A"><span class="toc-text">修改 Nginx 設定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A9%97%E8%AD%89-Nginx-%E8%A8%AD%E5%AE%9A%E6%AA%94%E4%B8%A6%E9%87%8D%E5%95%9F"><span class="toc-text">驗證 Nginx 設定檔並重啟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B3%E8%AB%8B%E6%86%91%E8%AD%89"><span class="toc-text">申請憑證</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A-Nginx-%E6%86%91%E8%AD%89"><span class="toc-text">設定 Nginx 憑證</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A-etc-nginx-snippets-ssl-DOMAIN-conf"><span class="toc-text">設定 &#x2F;etc&#x2F;nginx&#x2F;snippets&#x2F;ssl-DOMAIN.conf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A-etc-nginx-snippets-ssl-params-conf"><span class="toc-text">設定 &#x2F;etc&#x2F;nginx&#x2F;snippets&#x2F;ssl-params.conf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A-etc-nginx-sites-available-default"><span class="toc-text">設定 &#x2F;etc&#x2F;nginx&#x2F;sites-available&#x2F;default</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A9%97%E8%AD%89-Nginx-%E8%A8%AD%E5%AE%9A%E6%AA%94%E4%B8%A6%E9%87%8D%E5%95%9F-1"><span class="toc-text">驗證 Nginx 設定檔並重啟</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理"><img src="/img/categories/aws.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AWS S3 上傳下載權限管理"/></a><div class="content"><a class="title" href="/2022/11/27/Upload_and_Download_Permission_Management_for_AWS_S3/" title="AWS S3 上傳下載權限管理">AWS S3 上傳下載權限管理</a><time datetime="2022-11-27T09:00:00.000Z" title="Created 2022-11-27 17:00:00">2022-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)"/></a><div class="content"><a class="title" href="/2022/11/19/Secure_Nginx_with_Let's_Encrypt/" title="使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)">使用 Let's Encrypt 架設 HTTPS 伺服器 (NGINX)</a><time datetime="2022-11-19T10:00:00.000Z" title="Created 2022-11-19 18:00:00">2022-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH"><img src="/img/categories/ssh.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="在 Windows 安裝 OpenSSH"/></a><div class="content"><a class="title" href="/2022/11/13/Get_Started_with_OpenSSH_for_Windows/" title="在 Windows 安裝 OpenSSH">在 Windows 安裝 OpenSSH</a><time datetime="2022-11-13T08:00:00.000Z" title="Created 2022-11-13 16:00:00">2022-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器"><img src="/img/categories/nginx.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="NGINX 架設靜態檔案伺服器"/></a><div class="content"><a class="title" href="/2022/11/04/NGNIX_Serving_Static_Content/" title="NGINX 架設靜態檔案伺服器">NGINX 架設靜態檔案伺服器</a><time datetime="2022-11-04T08:00:00.000Z" title="Created 2022-11-04 16:00:00">2022-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例"><img src="/img/categories/windows10.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="環境變數介紹，以 Windows 10 為例"/></a><div class="content"><a class="title" href="/2022/11/01/Introduction_to_Environment_Variables_in_Windows10/" title="環境變數介紹，以 Windows 10 為例">環境變數介紹，以 Windows 10 為例</a><time datetime="2022-11-01T10:00:00.000Z" title="Created 2022-11-01 18:00:00">2022-11-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/top_img.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By VKmouse</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div></div></body></html>
